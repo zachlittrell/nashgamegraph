@@ -45,6 +45,33 @@ def merge(source_eq, target_eq):
 
     return new_eq_final
 
+
+#Does this equation have a solution?
+def ok(eq):
+    return len(eq['+'])>0 and len(eq['-'])>0
+
+#Does this system of equations have a solution?
+#NOTE this is currently inefficient
+def has_positive_solution(es):
+    while len(es)>1:
+        #If there are equations that don't have positive and negative vars
+        #then we're done
+        if any(not ok(e) for e in es):
+            return False
+        #Pop off the top and merge it with the rest of the system
+        rep = es.pop()
+        for i, e in enumerate(es):
+            es[i] = merge(rep, e)
+    return all(ok(e) for e in es)
+
+d1 = {'+':{'a':1},'-':{'b':1}}
+d2 = {'+':{'c':1}, '-':{'d':1}}
+
+
+print(has_positive_solution([d1,d2]))
+
+
+
 #TODO unfinished
 def make_eq(eq_str):
     eq_str = eq_str.replace(' ','')
@@ -106,30 +133,6 @@ e11 = {'+':{'y':1}, '-':{'x':1}}
 
 es = [e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11]
 
-
-#Does this equation have a solution?
-def ok(eq):
-    return len(eq['+'])>0 and len(eq['-'])>0
-
-#Does this system of equations have a solution?
-#NOTE this is currently inefficient
-def has_positive_solution(es):
-    while len(es)>1:
-        #If there are equations that don't have positive and negative vars
-        #then we're done
-        if any(not ok(e) for e in es):
-            return False
-        #Pop off the top and merge it with the rest of the system
-        rep = es.pop()
-        for i, e in enumerate(es):
-            es[i] = merge(rep, e)
-    return all(ok(e) for e in es)
-
-d1 = {'+':{'a':1},'-':{'b':1}}
-d2 = {'+':{'c':1}, '-':{'d':1}}
-
-
-print(has_positive_solution([d1,d2]))
 
 
 
